@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/style.css">
+    <title>Color Picker</title>
+    <style type="text/css">
+    :root {
+      --linrbbg: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    }
+    *{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-size: 1.2rem;
+    }
+    body{
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+      background-color: whitesmoke;
+    }
+    .container{
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    h2{
+      font-size: 2.5rem;
+      font-weight: bold;
+      background: var(--linrbbg);
+      background-clip: text;
+      color: transparent;
+    }
+    #colDisplay{
+      width: 70%;
+      height: 300px;
+      border-radius: 10px;
+      margin: 8px;
+      margin-block: 30px 80px;
+      background-color: black;
+    }
+    .inPart{
+      height: 30px;
+      width: 4ch;
+      font-size: 1.2rem;
+      padding: 10px 2px;
+      text-align: center;
+      border-radius: 4px;
+      outline: none;
+      border: 1px solid rgba(0,0,0,.5);
+    }
+    .inPartHex{
+      width: 7ch;
+    }
+    .inputWrap{
+      margin-block: 15px;
+      display: flex;
+    }
+    .inputCon{
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      background-color: white;
+      border-radius: 8px;
+      position: relative;
+      box-shadow: 2px 2px 15px rgba(0,0,0,.3);
+    }
+    details summary{
+      list-style: none;
+      margin-inline: 12px;
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 10px solid black;
+      transform: translate(10px, 200%) rotate(90deg);
+      position: relative;
+    }
+    details{
+      position: relative;
+    }
+    input[type="radio"]{
+      display: none;
+      appearance: none;
+    }
+    .inCol{
+      position: absolute;
+      top: -70%;
+      left: -65px;
+      background-color: rgba(245,245,255,1);
+      width: 100px;
+      border-radius: 5px;
+      box-shadow: 5px 5px 20px rgba(0,0,0,.5);
+      overflow: hidden;
+    }
+    label{
+      padding: 10px 15px;
+    }
+    .inCol div:active{
+      background-color: rgba(0,0,0,.3);
+    }
+    .inCol div:nth-child(2),.inCol div:nth-child(3){
+      border-top: 1.3px solid rgba(0,0,0,.3);
+    }
+    
+   .inputCon, .input1, .input2, .input3{
+      display: none;
+    }
+    </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2>Color Selector</h2>
+        <div id="colDisplay"></div>
+        <div class="inputWrap">
+          <div class="inputCon">
+            <div class="input1">Rgba: <input type="number" class="inPart inPart1">, <input type="number" class="inPart inPart2">, <input type="number" class="inPart inPart3">, <input type="number" class="inPart inPart4" value="1"></div>
+            <div class="input2">Hsla: <input type="number" class="inPart inPart1">, <input type="number" class="inPart inPart2">%, <input type="number" class="inPart inPart3">%, <input type="number" class="inPart inPart4" value="1"></div>
+            <div class="input3">Hex: #<input type="number" class="inPart inPart1 inPartHex"></div>
+          </div>
+          <details>
+            <summary></summary>
+          <div class="inCol">
+            <div class="rgbCol" class="colCon"><input name="radio" type="radio" id="rgbCol" class="Col" checked><label for="rgbCol" class="labRgb">Rgba</label></div>
+            <div class="hslCol" class="colCon"><input name="radio" type="radio" id="hslCol" class="Col"><label for="hslCol" class="labHsl">Hsla</label></div>
+            <div class="hexCol" class="colCon"><input name="radio" type="radio" id="hexCol" class="Col"><label for="hexCol" class="labHex">Hex</label></div>
+          </div>
+          </details>
+          
+        </div>
+      </div>
+      
+      
+      <script>
+        const colDisplay = document.getElementById('colDisplay');
+        const inPart = document.querySelectorAll('.inPart1, .inPart2, .inPart3, .inPart4');
+        const inPart1 = document.querySelector('.inPart1');
+        const inPart2 = document.querySelector('.inPart2');
+        const inPart3 = document.querySelector('.inPart3');
+        const inPart4 = document.querySelector('.inPart4');
+        
+        const inputCon = document.querySelector('.inputCon')
+        const input1 = document.querySelector('.input1');
+        const input2 = document.querySelector('.input2');
+        const input3 = document.querySelector('.input3');
+        const input4 = document.querySelector('.input4');
+        
+        const colCon = document.querySelectorAll('.colCon')
+        
+        const rgbCol = document.getElementById('rgbCol')
+        const hslCol = document.getElementById('hslCol')
+        const hexCol = document.getElementById('hexCol')
+        
+        const inRgbCol = document.querySelector('.rgbCol')
+        const inHslCol = document.querySelector('.hslCol')
+        const inHexCol = document.querySelector('.hexCol')
+        
+        let part1 = "";
+        let part2 = "";
+        let part3 = "";
+        let part4 = "";
+        let part5 = "";
+        let part6 = "";
+        let part7 = "";
+        let part8 = "";
+        let part9 = "";
+        
+        if(rgbCol.checked){
+          inRgbCol.style.backgroundColor = "rgba(0,0,0,.3)"
+          inputCon.style.display = 'block';
+          input1.style.display = 'block';
+          colDisplay.style.backgroundColor = `rgba( ${part1}, ${part2} , ${part3}, ${part4})`;
+        }
+        
+        const labRgb = document.querySelector('.labRgb')
+        rgbCol.addEventListener('input', ()=> {
+        if(rgbCol.checked){
+          inRgbCol.style.backgroundColor = "rgba(0,0,0,.3)";
+          inputCon.style.display = 'block';
+          input1.style.display = 'block';
+          if(hslCol.checked == false){
+            inHslCol.style.backgroundColor = "";
+            input2.style.display = 'none';
+          }
+          if(hexCol.checked == false){
+            inHexCol.style.backgroundColor = "";
+            input3.style.display = 'none';
+          }
+        }
+        
+        })
+        const labHsl = document.querySelector('.labHsl')
+        inHslCol.addEventListener('input', ()=> {
+        if(hslCol.checked){
+          inHslCol.style.backgroundColor = "rgba(0,0,0,.3)";
+          inputCon.style.display = 'block';
+          input2.style.display = 'block';
+          rgbCol.checked = false;
+          if(rgbCol.checked == false){
+            inRgbCol.style.backgroundColor = "";
+            input1.style.display = 'none';
+          }
+          if(hexCol.checked == false){
+            inHexCol.style.backgroundColor = "";
+            input3.style.display = 'none';
+          }
+        }
+        
+        });
+        const labHex = document.querySelector('.labHex')
+        
+        hexCol.addEventListener('input', ()=> {
+        if(hexCol.checked){
+          inHexCol.style.backgroundColor = "rgba(0,0,0,.3)";
+          inputCon.style.display = 'block';
+          input3.style.display = 'block';
+          if(rgbCol.checked == false){
+            inRgbCol.style.backgroundColor = "";
+            input1.style.display = 'none';
+          }
+          if(hslCol.checked == false){
+            inHslCol.style.backgroundColor = "";
+            input2.style.display = 'none';
+          }
+        }
+        
+        });
+        
+        
+        inPart.forEach(element => {
+          element.addEventListener('input', () => {
+           let  partNum0 = Number(inPart[0].value)
+           let  partNum1 = Number(inPart[1].value)
+           let  partNum2 = Number(inPart[2].value)
+           let  partNum3 = Number(inPart[3].value)
+            
+           let partNum4 = Number(inPart[4].value)
+           let partNum5 = Number(inPart[5].value)
+           let partNum6 = Number(inPart[6].value)
+           let partNum7 = Number(inPart[7].value)
+            
+           let partNum8 = Number(inPart[8].value)
+            
+            part1 = partNum0
+            part2 = partNum1
+            part3 = partNum2
+            part4 = partNum3
+            part5 = partNum4
+            part6 = partNum5
+            part7 = partNum6
+            part8 = partNum7
+            part9 = partNum8
+            
+            if(rgbCol.checked){
+            colDisplay.style.backgroundColor = `rgba( ${part1}, ${part2}, ${part3}, ${part4})`;
+            inPart[0].value = part1 > 255 ? 255 : part1;
+            inPart[1].value = part2 > 255 ? 255 : part2;
+            inPart[2].value = part3 > 255 ? 255 : part3;
+            inPart[3].value = part4 > 1.0 ? 1.0 : inPart[3].value;
+            }
+            if(hslCol.checked){
+            colDisplay.style.backgroundColor = `hsla( ${part5}, ${part6}%, ${part7}%, ${part8})`;
+            inPart[4].value = part5 > 360 ? 360 : part5;
+            inPart[5].value = part6 > 100 ? 100 : part6;
+            inPart[6].value = part7 > 100 ? 100 : part7;
+            inPart[7].value = part8 > 1 ? 1 : inPart[7].value;
+            }
+            if(hexCol.checked){
+            colDisplay.style.backgroundColor = `#${part9}`;
+           // inPart[8].value = part9 > 255 ? 255 : part9;
+            }
+
+          })
+        })
+      </script>
+    </body>
+    </html>
